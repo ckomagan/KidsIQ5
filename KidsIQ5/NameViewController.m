@@ -24,11 +24,14 @@
 @synthesize responseData;
 NSDictionary *res;
 
+NSString *newString;
 bool paidFlag = FALSE;
+BOOL nameExists;
 NSString *levelSelection;
 int challengeLevel = 1;
 int noOfQuestions = 0;
 float tableHeight = 50;
+NSString *country;
 
 #define LEGAL	@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 #define kStoredData @"KidsIQ"
@@ -103,7 +106,7 @@ float tableHeight = 50;
 -(void)validateTextField
 {
     // make sure all fields are have something in them
-    if (nameText.text.length  > 0 && nameText.text.length <= 6 && countryText.text.length  > 0) {
+    if (nameText.text.length  > 0 && nameText.text.length <= 6 && countryText.text.length  > 0 && !nameExists) {
         nameOK.enabled = YES;
     }
     else {
@@ -125,7 +128,7 @@ float tableHeight = 50;
         }
         [quizView.mainTimer invalidate];
         quizView.name = nameText.text;
-        quizView.country = countryText.text;
+        quizView.country = country;
         quizView.maxQuestions = noOfQuestions;
         quizView.level = challengeLevel; //1 is basic
         [quizView resetAll];
@@ -172,9 +175,10 @@ float tableHeight = 50;
     }
     if(textField == nameText)
     {
-    NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:LEGAL] invertedSet];
     NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+    [self checkName];
     return ([string isEqualToString:filtered] && !([newString length] > 6));
     }
     //return !([newString length] > 5);
@@ -207,7 +211,7 @@ float tableHeight = 50;
 - (IBAction)backgroundTouched:(id)sender {
     [self.view endEditing:YES];
     //[self validateTextField];
-    //[self checkName];
+    [self checkName];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -215,7 +219,7 @@ float tableHeight = 50;
     [countryText resignFirstResponder];
     [countryTableView resignFirstResponder];
     //[self validateTextField];
-    //[self checkName];
+    [self checkName];
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
@@ -233,7 +237,7 @@ float tableHeight = 50;
     label.lineBreakMode = UILineBreakModeWordWrap;
     label.backgroundColor = [UIColor clearColor];
     label.clipsToBounds = YES;
-    noOfQuestions = 1; //change it whatever default value
+    noOfQuestions = 20; //set defaul to 20, set to 1 for testing only
     return label;
 }
 
@@ -352,12 +356,14 @@ countryTableView.rowHeight = tableHeight;
 	}
     cell.textLabel.font = [UIFont systemFontOfSize:15.0f];
     cell.textLabel.text = [autoCompleteArray objectAtIndex:indexPath.row];
+    
 	return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
 	countryText.text = selectedCell.textLabel.text;
+    country = countryText.text;
     countryText.font = [UIFont fontWithName:@"Trebuchet MS" size:25];
     [self validateTextField];
     levelPickerView.hidden = NO;
@@ -366,7 +372,7 @@ countryTableView.rowHeight = tableHeight;
 
 -(void)checkName
 {
-    nsURL = [@"http://www.komagan.com/KidsIQ/leaders.php?format=json&checkname=1&name=" stringByAppendingFormat:@"%@", nameText];
+    nsURL = [@"http://www.komagan.com/KidsIQ/leaders.php?format=json&checkname=1&name=" stringByAppendingFormat:@"%@", newString];
     self.responseData = [NSMutableData data];
     NSURLRequest *aRequest = [NSURLRequest requestWithURL:[NSURL URLWithString: nsURL]];
     [[NSURLConnection alloc] initWithRequest:aRequest delegate:self];
@@ -378,11 +384,24 @@ countryTableView.rowHeight = tableHeight;
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     [self.responseData appendData:data];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
     NSError *myError = nil;
-    NSDictionary* json = [NSJSONSerialization
-                          JSONObjectWithData:responseData
-                          options:kNilOptions
-                          error:&myError];
+    res = [NSJSONSerialization JSONObjectWithData:self.responseData options:NSJSONReadingMutableLeaves error:&myError];
+    
+    for(NSDictionary *res1 in res) {
+        nameExists = [[res1 objectForKey:@"result"] boolValue];
+        if(nameExists)
+            {
+                statusLabel.text = [newString stringByAppendingString:@" Exists. Please enter another name"];
+            }
+        else{
+            statusLabel.text = @"";
+        }
+        [self validateTextField];
+    }
     
 }
 
@@ -392,12 +411,6 @@ countryTableView.rowHeight = tableHeight;
     self.responseData = nil;
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    //NSLog(@"connectionDidFinishLoading");
-    //NSLog(@"Succeeded! Received %d bytes of data",[self.responseData length]);
-    
-}
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)orientation
 {

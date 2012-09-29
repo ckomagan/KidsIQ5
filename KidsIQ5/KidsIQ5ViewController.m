@@ -166,8 +166,6 @@ UIColor *redColor;
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    //NSLog(@"didFailWithError");
-    //NSLog(@"Connection failed: %@", [error description]);
     self.responseData = nil;
 }
 

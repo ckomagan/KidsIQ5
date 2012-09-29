@@ -9,6 +9,7 @@
 #import "ResultController.h"
 #import "KidsIQ5ViewController.h"
 #import "NameViewController.h"
+#import "LeaderBoardController.h"
 #import "ASIFormDataRequest.h"
 
 @interface ResultController()
@@ -102,6 +103,13 @@ bool reset = NO;
     
     NameViewController *vc = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil]  instantiateViewControllerWithIdentifier:@"NameViewController"];
     vc.maxQuestions = 0;
+    [self presentModalViewController:vc animated:false];
+    
+}
+
+-(IBAction)leaderBoardScreen {
+    
+    LeaderBoardController *vc = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil]  instantiateViewControllerWithIdentifier:@"LeaderBoardController"];
     [self presentModalViewController:vc animated:false];
     
 }

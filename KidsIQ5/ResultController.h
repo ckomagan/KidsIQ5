@@ -27,5 +27,6 @@
 
 -(IBAction)dismissView;
 -(IBAction)loginScreen;
+-(IBAction)leaderBoardScreen;
 
 @end

@@ -13,11 +13,13 @@
 {
     IBOutlet UITableView *leaderList;
     NSMutableData *responseData;
-    
+    NSMutableArray *leaders, *columns, *nameList, *countryList, *scoreList;
+    UITableViewCell *cell, *tvCell;
 }
 
 @property (nonatomic, retain) NSMutableData *responseData;
 
+- (void)addColumn:(CGFloat)position;
 -(IBAction)dismissView;
 -(IBAction)loginScreen;
 

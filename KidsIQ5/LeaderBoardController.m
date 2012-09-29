@@ -16,13 +16,13 @@
 
 @implementation LeaderBoardController
 
-NSArray *tableData;
 NSIndexPath *currentSelection;
 @synthesize nsURL;
 @synthesize responseData;
 NSDictionary *res;
-UITableViewCell *cell;
 NSString *name, *score, *country;
+NSMutableArray *leaders;
+int leadercount = 0;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -43,10 +43,13 @@ NSString *name, *score, *country;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    leaders = [[NSMutableArray alloc] init];
+    nameList = [[NSMutableArray alloc] init];
+    countryList = [[NSMutableArray alloc] init];
+    scoreList = [[NSMutableArray alloc] init];
     
     [leaderList setDelegate:self];
     [leaderList setDataSource:self];
-    
     [self receiveData];
     
 }
@@ -57,6 +60,7 @@ NSString *name, *score, *country;
     self.responseData = [NSMutableData data];
     NSURLRequest *aRequest = [NSURLRequest requestWithURL:[NSURL URLWithString: nsURL]];
     [[NSURLConnection alloc] initWithRequest:aRequest delegate:self];
+    
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
@@ -67,31 +71,32 @@ NSString *name, *score, *country;
     [self.responseData appendData:data];
     NSError *myError = nil;
     res = [NSJSONSerialization JSONObjectWithData:self.responseData options:NSJSONReadingMutableLeaves error:&myError];
-    
+
+    //[leaderList beginUpdates];
     for(NSDictionary *res1 in res) {
-        name = [res1 objectForKey:@"name"];
-        NSLog(@"name = %@", name);
-        
+        name = [res1 objectForKey:@"name"];        
         score = [res1 objectForKey:@"score"];
         country = [res1 objectForKey:@"country"];
+        
+        NSString *space = @"       ";
+        NSString *row = [name stringByAppendingString:[space stringByAppendingString:[country stringByAppendingString:[space stringByAppendingString:score]]]];
+        //NSLog(@"%@", row);
+        [nameList addObject:name];
+        [countryList addObject:country];
+        [scoreList addObject:score];
+        [leaders addObject:row];
     }
-    NSString *space = @"             ";
-    NSString *row = [name stringByAppendingString:[space stringByAppendingString:[score stringByAppendingString:[space stringByAppendingString:country]]]];
-    
-    tableData = [NSArray arrayWithObjects: row, nil];
+    //[leaderList endUpdates];
     [leaderList reloadData];
+    
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    //NSLog(@"didFailWithError");
-    //NSLog(@"Connection failed: %@", [error description]);
     self.responseData = nil;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    //NSLog(@"connectionDidFinishLoading");
-    //NSLog(@"Succeeded! Received %d bytes of data",[self.responseData length]);
     
 }
 
@@ -115,24 +120,53 @@ NSString *name, *score, *country;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    id path = @"http://wholefoodsmarketcooking.com/images/foodpickle/wholefoods_user_icon.png?1343251919";
+    id path = @"http://www.geonames.org/flags/x/us.gif";
     NSURL *url = [NSURL URLWithString:path];
     NSData *data = [NSData dataWithContentsOfURL:url];
     UIImage *img = [[UIImage alloc] initWithData: data];
-    cell.textLabel.font = [UIFont boldSystemFontOfSize: 15.0];
-    cell.textLabel.text = [tableData objectAtIndex:indexPath.row];
-    [cell.imageView setImage:img];
+    
+    UILabel *cellLabelS1 = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, cell.frame.size.width, cell.frame.size.height)];
+    
+    [cellLabelS1 viewWithTag:1];
+    cellLabelS1.text = [nameList objectAtIndex:indexPath.row];
+    cellLabelS1.font = [UIFont boldSystemFontOfSize: 20.0];
+    [cell addSubview:cellLabelS1];
+    
+    UILabel *cellLabelS2 = [[UILabel alloc] initWithFrame:CGRectMake(130, 0, cell.frame.size.width, cell.frame.size.height)];
+
+    [cellLabelS2 viewWithTag:2];
+    cellLabelS2.text = [scoreList objectAtIndex:indexPath.row];
+    cellLabelS2.font = [UIFont boldSystemFontOfSize: 15.0];
+    [cell addSubview:cellLabelS2];
+
+    UILabel *cellLabelS3 = [[UILabel alloc] initWithFrame:CGRectMake(210, 0, cell.frame.size.width, cell.frame.size.height)];
+    
+    [cellLabelS3 viewWithTag:2];
+    cellLabelS3.text = [countryList objectAtIndex:indexPath.row];
+    cellLabelS3.font = [UIFont boldSystemFontOfSize: 15.0];
+    [cell addSubview:cellLabelS3];
+    
+    //leaderList.backgroundColor = [UIColor redColor];
+    //leaderList.separatorColor = [UIColor clearColor];
+
+    //[cell.imageView setImage:img];
+    
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [tableData count];
+    return [nameList count];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    return 1;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     currentSelection = indexPath;
-    [self performSegueWithIdentifier:@"offerDetailsPage" sender:self];
+    //[self performSegueWithIdentifier:@"offerDetailsPage" sender:self];
 }
 
 -(IBAction)loginScreen {
