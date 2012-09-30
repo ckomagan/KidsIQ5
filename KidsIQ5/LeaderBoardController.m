@@ -136,14 +136,14 @@ int leadercount = 0;
 
     [cellLabelS2 viewWithTag:2];
     cellLabelS2.text = [scoreList objectAtIndex:indexPath.row];
-    cellLabelS2.font = [UIFont boldSystemFontOfSize: 15.0];
+    cellLabelS2.font = [UIFont systemFontOfSize: 15.0];
     [cell addSubview:cellLabelS2];
 
     UILabel *cellLabelS3 = [[UILabel alloc] initWithFrame:CGRectMake(210, 0, cell.frame.size.width, cell.frame.size.height)];
     
     [cellLabelS3 viewWithTag:2];
     cellLabelS3.text = [countryList objectAtIndex:indexPath.row];
-    cellLabelS3.font = [UIFont boldSystemFontOfSize: 15.0];
+    cellLabelS3.font = [UIFont systemFontOfSize: 15.0];
     [cell addSubview:cellLabelS3];
     
     //leaderList.backgroundColor = [UIColor redColor];
