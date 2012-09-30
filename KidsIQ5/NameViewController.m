@@ -32,6 +32,7 @@ int challengeLevel = 1;
 int noOfQuestions = 0;
 float tableHeight = 50;
 NSString *country;
+bool countrySelected = FALSE;
 
 #define LEGAL	@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 #define kStoredData @"KidsIQ"
@@ -105,12 +106,27 @@ NSString *country;
 
 -(void)validateTextField
 {
+    if(nameExists || (!countrySelected && countryText.text.length > 0))
+    {
+        if(nameExists) {
+            statusLabel.text = [newString stringByAppendingString:@" Exists. Please enter another name"];
+        }
+        if (!countrySelected && countryText.text.length > 0)
+        {
+            statusLabel.text = @"Please select a valid country";
+        }
+    }
+    else{
+        statusLabel.text = @"";
+    }
+    
     // make sure all fields are have something in them
-    if (nameText.text.length  > 0 && nameText.text.length <= 6 && countryText.text.length  > 0 && !nameExists) {
+    if (nameText.text.length  > 0 && nameText.text.length <= 6 && countryText.text.length  > 0 && !nameExists && countrySelected) {
         nameOK.enabled = YES;
     }
     else {
         nameOK.enabled = NO;
+        
     }
 }
 
@@ -171,6 +187,7 @@ NSString *country;
         NSString *substring = [NSString stringWithString:textField.text];
         substring = [substring stringByReplacingCharactersInRange:range withString:string];
         [self searchAutocompleteEntriesWithSubstring:substring];
+        countrySelected = FALSE;
         return TRUE;
     }
     if(textField == nameText)
@@ -191,26 +208,27 @@ NSString *country;
     [nameText resignFirstResponder];
     [countryText resignFirstResponder];
     [countryTableView resignFirstResponder];
-    [self validateTextField];
+    //[self validateTextField];
     //[self checkName];
 }
 
 // Close keyboard when Enter or Done is pressed
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
 	BOOL isDone = YES;
-	
+    [nameText resignFirstResponder];
 	if (isDone) {
         [self finishedSearching];
+        
 		return YES;
 	} else {
 		return NO;
 	}
-    [self validateTextField];
+    //[self validateTextField];
 }
 
 - (IBAction)backgroundTouched:(id)sender {
     [self.view endEditing:YES];
-    //[self validateTextField];
+    [self validateTextField];
     [self checkName];
 }
 
@@ -218,7 +236,7 @@ NSString *country;
     [nameText resignFirstResponder];
     [countryText resignFirstResponder];
     [countryTableView resignFirstResponder];
-    //[self validateTextField];
+    [self validateTextField];
     [self checkName];
 }
 
@@ -320,6 +338,7 @@ countryTableView.rowHeight = tableHeight;
 	levelPickerView.hidden = YES;
 	countryTableView.hidden = NO;
 	[countryTableView reloadData];
+    [self validateTextField];
 }
 
 #pragma mark UITableViewDelegate methods
@@ -331,7 +350,7 @@ countryTableView.rowHeight = tableHeight;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger) section {
     
 	//Resize auto complete table based on how many elements will be displayed in the table
-	if (autoCompleteArray.count >=3) {
+	if (autoCompleteArray.count >= 3) {
 		countryTableView.frame = CGRectMake(60, 190, 200, tableHeight*3);
 		return autoCompleteArray.count;
 	}
@@ -341,7 +360,12 @@ countryTableView.rowHeight = tableHeight;
 		return autoCompleteArray.count;
 	}
 	
-	else {
+	else if (autoCompleteArray.count == 0){
+		countryTableView.frame = CGRectMake(60, 190, 200, 0);
+        levelPickerView.hidden = NO;
+		return autoCompleteArray.count;
+	}
+    else {
 		countryTableView.frame = CGRectMake(60, 190, 200, tableHeight);
 		return autoCompleteArray.count;
 	}
@@ -356,7 +380,6 @@ countryTableView.rowHeight = tableHeight;
 	}
     cell.textLabel.font = [UIFont systemFontOfSize:15.0f];
     cell.textLabel.text = [autoCompleteArray objectAtIndex:indexPath.row];
-    
 	return cell;
 }
 
@@ -364,6 +387,7 @@ countryTableView.rowHeight = tableHeight;
 	UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
 	countryText.text = selectedCell.textLabel.text;
     country = countryText.text;
+    countrySelected = TRUE;
     countryText.font = [UIFont fontWithName:@"Trebuchet MS" size:25];
     [self validateTextField];
     levelPickerView.hidden = NO;
@@ -398,7 +422,7 @@ countryTableView.rowHeight = tableHeight;
                 statusLabel.text = [newString stringByAppendingString:@" Exists. Please enter another name"];
             }
         else{
-            statusLabel.text = @"";
+            //statusLabel.text = @"";
         }
         [self validateTextField];
     }
@@ -433,7 +457,7 @@ countryTableView.rowHeight = tableHeight;
     
     // check userdefaults key
     NSError *error = nil;
-   //[SFHFKeychainUtils deleteItemForUsername:@"KidsIQ" andServiceName:kStoredData error:&error];
+   [SFHFKeychainUtils deleteItemForUsername:@"KidsIQ" andServiceName:kStoredData error:&error];
     NSString *password = [SFHFKeychainUtils getPasswordForUsername: @"KidsIQ" andServiceName: kStoredData error:&error];
     NSLog(@"%@", password);
     if ([password isEqualToString:@"whatever"])
