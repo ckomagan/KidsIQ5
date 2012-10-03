@@ -12,8 +12,10 @@
 @interface LeaderBoardController : UIViewController <UITableViewDelegate, UITextFieldDelegate, UITableViewDataSource>
 {
     IBOutlet UITableView *leaderList;
+    IBOutlet UIButton *moreLeaders, *prevLeaders;
     NSMutableData *responseData;
     NSMutableArray *leaders, *columns, *nameList, *countryList, *scoreList;
+    NSMutableArray *copyNameList, *copyCountryList, *copyScoreList;
     UITableViewCell *cell, *tvCell;
 }
 
@@ -22,5 +24,7 @@
 - (void)addColumn:(CGFloat)position;
 -(IBAction)dismissView;
 -(IBAction)loginScreen;
+-(IBAction)showMoreLeaders;
+-(IBAction)showPreviousLeaders;
 
 @end

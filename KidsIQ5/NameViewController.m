@@ -87,6 +87,7 @@ bool countrySelected = FALSE;
     [self.levelPickerView setTransform:rotate];
     [self.view addSubview:levelPickerView];
     self.levelPickerView.center = CGPointMake(160,260);
+    [self loadUserSession];
 }
 
 - (void)viewDidUnload
@@ -142,6 +143,7 @@ bool countrySelected = FALSE;
             errorStatus.text = @"Please enter the name.";
             return;
         }
+        [self saveUserSession];
         [quizView.mainTimer invalidate];
         quizView.name = nameText.text;
         quizView.country = country;
@@ -150,6 +152,27 @@ bool countrySelected = FALSE;
         [quizView resetAll];
     }
     //NSLog(@"%i", noOfQuestions);
+}
+
+- (void)saveUserSession
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if (standardUserDefaults) {
+        [standardUserDefaults setObject:nameText.text forKey:@"name"];
+        [standardUserDefaults setObject:country forKey:@"country"];
+        [standardUserDefaults synchronize];
+    }
+
+}
+
+- (void)loadUserSession
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if (standardUserDefaults)
+        nameText.text = [standardUserDefaults objectForKey:@"name"];
+        //countryText.text = [standardUserDefaults objectForKey:@"country"];
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView;

@@ -43,15 +43,18 @@ int leadercount = 0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    moreLeaders.hidden = TRUE;
+    prevLeaders.hidden = TRUE;
     leaders = [[NSMutableArray alloc] init];
-    nameList = [[NSMutableArray alloc] init];
-    countryList = [[NSMutableArray alloc] init];
-    scoreList = [[NSMutableArray alloc] init];
+    copyNameList = nameList = [[NSMutableArray alloc] init];
+    copyCountryList = countryList = [[NSMutableArray alloc] init];
+    copyScoreList = scoreList = [[NSMutableArray alloc] init];
     
+    leaderList.scrollEnabled = YES;
+        
     [leaderList setDelegate:self];
     [leaderList setDataSource:self];
     [self receiveData];
-    
 }
 
 -(void)receiveData
@@ -109,6 +112,23 @@ int leadercount = 0;
     [self dismissModalViewControllerAnimated:YES];
 }
 
+-(IBAction)showMoreLeaders {
+    
+    nameList = [NSArray arrayWithArray:[copyNameList subarrayWithRange:NSMakeRange(7, [copyNameList count]-7)]];
+    scoreList = [NSArray arrayWithArray:[copyScoreList subarrayWithRange:NSMakeRange(7, [copyScoreList count]-7)]];
+    countryList = [NSArray arrayWithArray:[copyCountryList subarrayWithRange:NSMakeRange(7, [copyCountryList count]-7)]];
+    prevLeaders.hidden = FALSE;
+    [leaderList reloadData];
+}
+
+-(IBAction)showPreviousLeaders {
+    
+    nameList = [NSArray arrayWithArray:[copyNameList subarrayWithRange:NSMakeRange(0, 6)]];
+    scoreList = [NSArray arrayWithArray:[copyScoreList subarrayWithRange:NSMakeRange(0, 6)]];
+    countryList = [NSArray arrayWithArray:[copyCountryList subarrayWithRange:NSMakeRange(0, 6)]];
+    prevLeaders.hidden = TRUE;
+    [leaderList reloadData];
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -146,6 +166,7 @@ int leadercount = 0;
     cellLabelS3.font = [UIFont systemFontOfSize: 15.0];
     [cell addSubview:cellLabelS3];
     
+    
     //leaderList.backgroundColor = [UIColor redColor];
     //leaderList.separatorColor = [UIColor clearColor];
 
@@ -156,7 +177,14 @@ int leadercount = 0;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [nameList count];
+    if([nameList count] >= 6)
+    {
+        moreLeaders.hidden = FALSE;
+        return 6;
+    }
+    else {
+        return [nameList count];
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

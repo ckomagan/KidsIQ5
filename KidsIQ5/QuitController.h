@@ -14,6 +14,8 @@
 }
 
 @property (nonatomic, retain) NSTimer *mainTimer;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *country;
 
 -(IBAction)dismissView;
 -(IBAction)loginScreen;

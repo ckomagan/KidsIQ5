@@ -53,9 +53,11 @@ UIColor *redColor;
 }
 
 -(IBAction)showQuitController {
-    QuitController *tempView = [[QuitController alloc] initWithNibName:@"QuitController" bundle:nil];
-    tempView.mainTimer = mainTimer;
-    [self presentModalViewController:tempView animated:true];
+    QuitController *quitView = [[QuitController alloc] initWithNibName:@"QuitController" bundle:nil];
+    quitView.mainTimer = mainTimer;
+    quitView.name = name;
+    quitView.country = country;
+    [self presentModalViewController:quitView animated:true];
 }
 
 - (void)showbutton {

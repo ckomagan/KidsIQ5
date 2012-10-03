@@ -15,6 +15,9 @@
 
 @implementation QuitController
 
+@synthesize name;
+@synthesize country;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -48,6 +51,7 @@
 -(IBAction)loginScreen {
     [self.mainTimer invalidate];
     UIViewController *vc = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil]  instantiateViewControllerWithIdentifier:@"NameViewController"];
+    
     [self presentModalViewController:vc animated:false];
 }
 
