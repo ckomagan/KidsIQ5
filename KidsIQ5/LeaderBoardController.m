@@ -202,10 +202,4 @@ int leadercount = 0;
     [self presentModalViewController:vc animated:false];
 }
 
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)orientation
-{
-    return (orientation != UIDeviceOrientationLandscapeLeft) &&
-	(orientation != UIDeviceOrientationLandscapeRight);
-}
-
 @end
