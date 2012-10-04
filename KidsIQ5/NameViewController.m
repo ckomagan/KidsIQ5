@@ -160,7 +160,7 @@ bool countrySelected = FALSE;
     
     if (standardUserDefaults) {
         [standardUserDefaults setObject:nameText.text forKey:@"name"];
-        [standardUserDefaults setObject:country forKey:@"country"];
+        //[standardUserDefaults setObject:country forKey:@"country"];
         [standardUserDefaults synchronize];
     }
 
@@ -173,6 +173,7 @@ bool countrySelected = FALSE;
     if (standardUserDefaults)
         nameText.text = [standardUserDefaults objectForKey:@"name"];
         //countryText.text = [standardUserDefaults objectForKey:@"country"];
+        //countryText.text = [[standardUserDefaults objectForKey:@"country"] substringWithRange:NSMakeRange(0,5)];
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView;
@@ -231,8 +232,8 @@ bool countrySelected = FALSE;
     [nameText resignFirstResponder];
     [countryText resignFirstResponder];
     [countryTableView resignFirstResponder];
-    //[self validateTextField];
-    //[self checkName];
+    [self validateTextField];
+    [self checkName];
 }
 
 // Close keyboard when Enter or Done is pressed
@@ -246,7 +247,7 @@ bool countrySelected = FALSE;
 	} else {
 		return NO;
 	}
-    //[self validateTextField];
+    [self validateTextField];
 }
 
 - (IBAction)backgroundTouched:(id)sender {
@@ -320,10 +321,10 @@ autoCompleteArray = [[NSMutableArray alloc] init];
 
     
 //Search Bar
-countryText = [[UITextField alloc] initWithFrame:CGRectMake(60, 150, 200, 40)];
+countryText = [[UITextField alloc] initWithFrame:CGRectMake(40, 150, 240, 40)];
 countryText.borderStyle = 3; // rounded, recessed rectangle
 countryText.autocorrectionType = UITextAutocorrectionTypeNo;
-countryText.textAlignment = UITextAlignmentLeft;
+countryText.textAlignment = UITextAlignmentCenter;
 countryText.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 countryText.returnKeyType = UIReturnKeyDone;
 countryText.font = [UIFont fontWithName:@"Trebuchet MS" size:30];
