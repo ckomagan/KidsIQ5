@@ -16,12 +16,7 @@
 
 @implementation NameViewController
 
-@synthesize levelpicker;
-@synthesize levelPickerView;
-@synthesize maxQuestions;
-@synthesize statusLabel;
-@synthesize nsURL;
-@synthesize responseData;
+@synthesize levelpicker, levelPickerView, maxQuestions, statusLabel, nsURL, responseData;
 NSDictionary *res;
 
 NSString *newString;
@@ -148,6 +143,7 @@ bool countrySelected = FALSE;
         quizView.name = nameText.text;
         quizView.country = country;
         quizView.maxQuestions = noOfQuestions;
+        quizView.paidFlag = paidFlag;
         quizView.level = challengeLevel; //1 is basic
         [quizView resetAll];
     }
