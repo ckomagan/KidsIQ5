@@ -18,11 +18,10 @@
     NSMutableData *responseData;
 }
 
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *titleText;
-@property (nonatomic, strong) NSString *score;
-@property (nonatomic, strong) NSString *country;
-@property int maxQuestions;
+@property (nonatomic, strong) NSString *name, *titleText, *score, *country;
+@property Boolean paidFlag;
+
+@property int maxQuestions, fCount, fTCount, mCount, mTCount, sCount, sTCount;
 @property (nonatomic, retain) NSMutableData *responseData;
 
 -(IBAction)dismissView;
