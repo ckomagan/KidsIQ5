@@ -30,6 +30,7 @@
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *country;
+@property Boolean paidFlag;
 @property (nonatomic, retain) NSMutableData *responseData;
 @property (nonatomic, retain) NSMutableSet *usedNumbers;
 @property (nonatomic, retain) UILabel *myCounterLabel;
@@ -54,6 +55,8 @@
 -(IBAction)skipQuestion;
 
 -(void)calculatescore;
+
+- (void) calculateCount:(int)qCount;
 
 -(void)showResults;
 

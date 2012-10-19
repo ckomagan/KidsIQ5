@@ -29,23 +29,17 @@ NSInteger _id = -1;
 NSInteger _score = 0;
 NSInteger _noOfQuestions = 1;
 int count = 1;
+int category;
 NSDictionary *res;
 NSString *titleText;
 NSString *scoreText;
 NSString *finalScoreText;
 NSString *btnPressed;
 bool reset;
-int counter;
-int hours, minutes, seconds;
-int secondsLeft;
-int noOfSecs;
+int counter, hours, minutes, seconds, secondsLeft, noOfSecs, fCount, mCount, sCount;
 UIColor *greenColor;
 UIColor *redColor;
-@synthesize name;
-@synthesize country;
-@synthesize level;
-@synthesize maxQuestions;
-@synthesize myCounterLabel;
+@synthesize name, country, paidFlag, level, maxQuestions, myCounterLabel;
 
 -(void)showLoginViewController {
     
@@ -126,7 +120,7 @@ UIColor *redColor;
     if ( [mainTimer isValid]){
         [mainTimer invalidate], mainTimer=nil;
     }
-    NSLog(@"iq viwq %@", country);
+    //NSLog(@"iq viwq %@", country);
     mainTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f
                                                  target:self
                                                selector:@selector(advanceTimer:)
@@ -144,7 +138,7 @@ UIColor *redColor;
 		[submit setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 		[submit setBackgroundColor:[UIColor darkGrayColor]];
         
-		_nsURL = [@"http://www.komagan.com/KidsIQ/index.php?format=json&quiz=1&question_id=" stringByAppendingFormat:@"%d ", _id];
+		_nsURL = [@"http://www.komagan.com/KidsIQ/index.php?format=json&quiz2=1&question_id=" stringByAppendingFormat:@"%d ", _id];
 		self.responseData = [NSMutableData data];
 		
 		NSURLRequest *aRequest = [NSURLRequest requestWithURL:[NSURL URLWithString: _nsURL]];
@@ -184,6 +178,7 @@ UIColor *redColor;
         NSString *preText = [NSString stringWithFormat:@"%d", _noOfQuestions];
         preText = [preText stringByAppendingFormat:@") "];
         question.text = [preText stringByAppendingString:[res1 objectForKey:@"question"]];
+        category = [[res1 objectForKey:@"category"] intValue];
         NSString *answer = [res1 objectForKey:@"choice_text"];
         [answers addObject :answer];
         
@@ -257,6 +252,7 @@ UIColor *redColor;
             result.text = @"Correct Answer!";
             [result setTextColor:greenColor];
 			[self highlightCorrect];
+            [self calculateCount:category];
             _score++;
         }
         else {
@@ -334,6 +330,13 @@ UIColor *redColor;
     finalScoreText = [finalScoreText stringByAppendingString: @"%"];
 }
 
+- (void) calculateCount:(int)qCount
+{
+    if(qCount == 1) fCount++;
+    if(qCount == 2) mCount++;
+    if(qCount == 3) sCount++;
+}
+
 -(void)highlightCorrect
 {
 	if([btnPressed isEqual:@"choicea"])
@@ -397,6 +400,10 @@ UIColor *redColor;
     resultView.titleText = titleText;
     resultView.score = finalScoreText;
     resultView.country = country;
+    resultView.paidFlag = paidFlag;
+    resultView.fCount = fCount;
+    resultView.mCount = mCount;
+    resultView.sCount = sCount;
 	resultView.maxQuestions = maxQuestions;
 	[self resetAll];
     resultView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
