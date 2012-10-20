@@ -14,7 +14,9 @@
 
 @implementation LeaderBoardDetailController
 
-@synthesize name, scoreDetail, fCount, mCount, sCount, fTCount, mTCount, sTCount;
+@synthesize name, country, scoreDetail, fCount, mCount, sCount, fTCount, mTCount, sTCount;
+NSString *flagUrl = @"http://www.komagan.com/KidsIQ/flags/";
+NSString *format = @".gif";
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -41,11 +43,19 @@
     
     nameLabel.text = name;
     
-    id path = @"http://www.geonames.org/flags/x/us.gif";
+    id path = [self getFlags:country];
     NSURL *url = [NSURL URLWithString:path];
     NSData *imgData = [[NSData alloc] initWithContentsOfURL:url];
     UIImage *image = [[UIImage alloc] initWithData:imgData];
     [imageView setImage:image];
+}
+
+- (NSString*)getFlags:(NSString*)countryname
+{
+    countryname = [countryname stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    id path =  [flagUrl stringByAppendingFormat:countryname];
+    path = [path stringByAppendingString:format];
+    return path;
 }
 
 -(IBAction)dismissView {
