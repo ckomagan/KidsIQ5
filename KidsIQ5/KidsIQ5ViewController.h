@@ -48,7 +48,7 @@
 
 -(void)resetAll;
 
-- (void)disableAllChoices;
+-(void)disableAllChoices;
 
 -(IBAction)checkAnswer;
 
@@ -56,7 +56,9 @@
 
 -(void)calculatescore;
 
-- (void) calculateCount:(int)qCount;
+-(void) calculateCount:(int)qCount;
+
+-(void) calculateTCount:(int)category;
 
 -(void)showResults;
 

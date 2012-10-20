@@ -36,7 +36,7 @@ NSString *scoreText;
 NSString *finalScoreText;
 NSString *btnPressed;
 bool reset;
-int counter, hours, minutes, seconds, secondsLeft, noOfSecs, fCount, mCount, sCount;
+int counter, hours, minutes, seconds, secondsLeft, noOfSecs, fCount, fTCount, mCount, mTCount, sCount, sTCount;
 UIColor *greenColor;
 UIColor *redColor;
 @synthesize name, country, paidFlag, level, maxQuestions, myCounterLabel;
@@ -59,6 +59,8 @@ UIColor *redColor;
     [submit setTitle: @"Submit" forState: UIControlStateNormal];
 	[submit setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 	[submit setBackgroundColor:[UIColor brownColor]];
+    [self calculateTCount:category];
+
 }
 
 - (IBAction)choicea:(id)sender {
@@ -81,7 +83,6 @@ UIColor *redColor;
     _selectedChoice = answerB.text;
 	btnPressed = @"choiceb";
     [self showbutton];
-    
 }
 
 - (IBAction)choicec:(id)sender {
@@ -189,7 +190,7 @@ UIColor *redColor;
         }
         if([question.text isEqualToString:@""]) [self disableAllChoices];
     }
-    
+
     if ([res count] ==0)
     {
         [self showResults];
@@ -290,6 +291,7 @@ UIColor *redColor;
     [self trackScore];
 	result.text =@"";
     [mainTimer invalidate];
+    [self calculateTCount:category];
     [self viewDidLoad];
 }
 
@@ -335,6 +337,14 @@ UIColor *redColor;
     if(qCount == 1) fCount++;
     if(qCount == 2) mCount++;
     if(qCount == 3) sCount++;
+}
+
+- (void) calculateTCount:(int)category
+{
+    if(category == 1) { fTCount++; }
+    if(category == 2) { mTCount++; }
+    if(category == 3) { sTCount++; }
+    NSLog(@"%d, %d, %d", fTCount, mTCount, sTCount);
 }
 
 -(void)highlightCorrect
@@ -402,8 +412,11 @@ UIColor *redColor;
     resultView.country = country;
     resultView.paidFlag = paidFlag;
     resultView.fCount = fCount;
+    resultView.fTCount = fTCount;
     resultView.mCount = mCount;
+    resultView.mTCount = mTCount;
     resultView.sCount = sCount;
+    resultView.sTCount = sTCount;
 	resultView.maxQuestions = maxQuestions;
 	[self resetAll];
     resultView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
