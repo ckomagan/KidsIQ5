@@ -46,9 +46,10 @@ int row, page = 0, totalItems;
 {
     [super viewDidLoad];
     page = 1;
+    totalItems = 0;
     moreLeaders.hidden = TRUE;
     prevLeaders.hidden = TRUE;
-    leaders = [[NSMutableArray alloc] init];
+    // leaders = [[NSMutableArray alloc] init];
     copyNameList = nameList = [[NSMutableArray alloc] init];
     copyCountryList = countryList = [[NSMutableArray alloc] init];
     copyScoreList = scoreList = [[NSMutableArray alloc] init];
@@ -90,7 +91,7 @@ int row, page = 0, totalItems;
         score = [res1 objectForKey:@"score"];
         country = [res1 objectForKey:@"country"];
         NSString *space = @"       ";
-        NSString *row = [name stringByAppendingString:[space stringByAppendingString:[country stringByAppendingString:[space stringByAppendingString:score]]]];
+       // NSString *row = [name stringByAppendingString:[space stringByAppendingString:[country stringByAppendingString:[space stringByAppendingString:score]]]];
         //NSLog(@"%@", [res1 objectForKey:@"fTCount"]);
         [nameList addObject:name];
         [countryList addObject:country];
@@ -101,7 +102,7 @@ int row, page = 0, totalItems;
         [mTCountList addObject:[res1 objectForKey:@"mTCount"]];
         [sCountList addObject:[res1 objectForKey:@"sCount"]];
         [sTCountList addObject:[res1 objectForKey:@"sTCount"]];
-        [leaders addObject:row];
+        //[leaders addObject:row];
         totalItems++;
     }
     //[leaderList endUpdates];
@@ -188,26 +189,22 @@ int row, page = 0, totalItems;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    id path = @"http://www.geonames.org/flags/x/us.gif";
-    NSURL *url = [NSURL URLWithString:path];
-    NSData *data = [NSData dataWithContentsOfURL:url];
-    UIImage *img = [[UIImage alloc] initWithData: data];
     
-    UILabel *cellLabelS1 = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, cell.frame.size.width, cell.frame.size.height)];
+    UILabel *cellLabelS1 = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, cell.frame.size.width, cell.frame.size.height)];
     
     [cellLabelS1 viewWithTag:1];
     cellLabelS1.text = [nameList objectAtIndex:indexPath.row];
     cellLabelS1.font = [UIFont boldSystemFontOfSize: 20.0];
     [cell addSubview:cellLabelS1];
     
-    UILabel *cellLabelS2 = [[UILabel alloc] initWithFrame:CGRectMake(130, 0, cell.frame.size.width, cell.frame.size.height)];
+    UILabel *cellLabelS2 = [[UILabel alloc] initWithFrame:CGRectMake(122, 0, cell.frame.size.width, cell.frame.size.height)];
 
     [cellLabelS2 viewWithTag:2];
     cellLabelS2.text = [scoreList objectAtIndex:indexPath.row];
     cellLabelS2.font = [UIFont systemFontOfSize: 15.0];
     [cell addSubview:cellLabelS2];
 
-    UILabel *cellLabelS3 = [[UILabel alloc] initWithFrame:CGRectMake(210, 0, cell.frame.size.width, cell.frame.size.height)];
+    UILabel *cellLabelS3 = [[UILabel alloc] initWithFrame:CGRectMake(200, 0, cell.frame.size.width, cell.frame.size.height)];
     
     [cellLabelS3 viewWithTag:2];
     cellLabelS3.text = [countryList objectAtIndex:indexPath.row];
@@ -233,6 +230,7 @@ int row, page = 0, totalItems;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [leaderList reloadData];
     NSUInteger row = [indexPath row];
     name = [nameList objectAtIndex:row];
     score = [scoreList objectAtIndex:row];
@@ -242,7 +240,6 @@ int row, page = 0, totalItems;
     mTCount = [[mTCountList objectAtIndex:row] intValue];
     sCount = [[sCountList objectAtIndex:row] intValue];
     sTCount = [[sTCountList objectAtIndex:row] intValue];
-    
     [self performSegueWithIdentifier:@"showLeaderBoard" sender:self];
 }
 
@@ -251,6 +248,7 @@ int row, page = 0, totalItems;
     if ([[segue identifier] isEqualToString:@"showLeaderBoard"]) {
         LeaderBoardDetailController *leaderDetailView = segue.destinationViewController;
         leaderDetailView.name = name;
+        leaderDetailView.country = country;
         leaderDetailView.scoreDetail = score;
         leaderDetailView.fCount = fCount;
         leaderDetailView.mCount = mCount;
