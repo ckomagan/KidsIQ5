@@ -59,8 +59,6 @@ UIColor *redColor;
     [submit setTitle: @"Submit" forState: UIControlStateNormal];
 	[submit setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 	[submit setBackgroundColor:[UIColor brownColor]];
-    [self calculateTCount:category];
-
 }
 
 - (IBAction)choicea:(id)sender {
@@ -223,6 +221,7 @@ UIColor *redColor;
 {
     _id = -1;
     _score = 0;
+    fCount = mCount = sCount = fTCount = mTCount = sTCount = 0;
     reset = YES;  //reset the first set of questions
     _noOfQuestions = 1;
     greenColor = [UIColor colorWithRed:60.0f/255.0f green:179.0f/255.0f blue:113.0f/255.0f alpha:1.0f];
@@ -247,6 +246,7 @@ UIColor *redColor;
 
 - (IBAction)checkAnswer
 {
+    [self calculateTCount:category];
     if([submit.titleLabel.text isEqual:@"Submit"])
     {
         if ([_selectedChoice isEqualToString:_correctChoice]) {
@@ -418,10 +418,10 @@ UIColor *redColor;
     resultView.sCount = sCount;
     resultView.sTCount = sTCount;
 	resultView.maxQuestions = maxQuestions;
-	[self resetAll];
     resultView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [mainTimer invalidate];
     [self presentModalViewController:resultView animated:true];
+    [self resetAll];
 }
 
 -(int)generateRandomNumber
