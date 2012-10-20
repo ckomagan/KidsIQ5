@@ -672,7 +672,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vmK-B7-31c">
-                                <rect key="frame" x="60" y="7" width="197" height="48"/>
+                                <rect key="frame" x="21" y="7" width="150" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -718,8 +718,8 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" id="Pkl-Zc-SK2">
-                                <rect key="frame" x="218" y="6" width="77" height="50"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="Pkl-Zc-SK2">
+                                <rect key="frame" x="196" y="6" width="99" height="49"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
@@ -747,6 +747,10 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/KidsIQ5ViewController.h"/>
             <relationships>
                 <relationship kind="action" name="checkAnswer"/>
+                <relationship kind="action" name="choicea:"/>
+                <relationship kind="action" name="choiceb:"/>
+                <relationship kind="action" name="choicec:"/>
+                <relationship kind="action" name="choiced:"/>
                 <relationship kind="action" name="dismissView"/>
                 <relationship kind="action" name="showLoginViewController"/>
                 <relationship kind="action" name="showQuitController"/>
@@ -800,6 +804,7 @@
         <class className="NameViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NameViewController.h"/>
             <relationships>
+                <relationship kind="action" name="backgroundTouched:"/>
                 <relationship kind="action" name="deleteKeyChain:"/>
                 <relationship kind="action" name="dismissView"/>
                 <relationship kind="action" name="textFieldReturn:"/>
