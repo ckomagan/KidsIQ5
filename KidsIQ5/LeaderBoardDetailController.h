@@ -12,8 +12,9 @@
 {
     IBOutlet UILabel *nameLabel, *scoreLabel, *fCountLabel, *mCountLabel, *sCountLabel;
     IBOutlet UIProgressView *fCountView, *mCountView, *sCountView;
+    IBOutlet UIImageView *imageView;
 }
-@property (nonatomic, retain) NSString *name, *scoreDetail;
+@property (nonatomic, retain) NSString *name, *country, *scoreDetail;
 @property int fCount, mCount, sCount, fTCount, mTCount, sTCount;
 
 -(IBAction)dismissView;

@@ -38,7 +38,14 @@
     fCountView.progress = (float)fCount/fTCount;
     mCountView.progress = (float)mCount/mTCount;
     sCountView.progress = (float)sCount/sTCount;
+    
     nameLabel.text = name;
+    
+    id path = @"http://www.geonames.org/flags/x/us.gif";
+    NSURL *url = [NSURL URLWithString:path];
+    NSData *imgData = [[NSData alloc] initWithContentsOfURL:url];
+    UIImage *image = [[UIImage alloc] initWithData:imgData];
+    [imageView setImage:image];
 }
 
 -(IBAction)dismissView {
