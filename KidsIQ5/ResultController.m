@@ -68,9 +68,11 @@ NSString *paid = @"N";
     [request setPostValue:country forKey:@"country"];
     [request setPostValue:paid forKey:@"paid"];
     [request setPostValue:[NSNumber numberWithInt:fCount] forKey:@"fCount"];
+    [request setPostValue:[NSNumber numberWithInt:fTCount] forKey:@"fTCount"];
     [request setPostValue:[NSNumber numberWithInt:mCount] forKey:@"mCount"];
+    [request setPostValue:[NSNumber numberWithInt:mTCount] forKey:@"mTCount"];
     [request setPostValue:[NSNumber numberWithInt:sCount] forKey:@"sCount"];
-
+    [request setPostValue:[NSNumber numberWithInt:sTCount] forKey:@"sTCount"];
     [request setDelegate:self];
     [request startAsynchronous];
 }
