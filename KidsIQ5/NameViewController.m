@@ -104,6 +104,7 @@ bool countrySelected = FALSE;
 {
     if(nameExists || (!countrySelected && countryText.text.length > 0))
     {
+        //[self checkName];
         if(nameExists) {
             statusLabel.text = [newString stringByAppendingString:@" Exists. Please enter another name"];
         }
@@ -115,7 +116,6 @@ bool countrySelected = FALSE;
     else{
         statusLabel.text = @"";
     }
-    
     // make sure all fields are have something in them
     if (nameText.text.length  > 0 && nameText.text.length <= 6 && countryText.text.length  > 0 && !nameExists && countrySelected) {
         nameOK.enabled = YES;
@@ -207,16 +207,17 @@ bool countrySelected = FALSE;
         NSString *substring = [NSString stringWithString:textField.text];
         substring = [substring stringByReplacingCharactersInRange:range withString:string];
         [self searchAutocompleteEntriesWithSubstring:substring];
+        //[self checkName];
         countrySelected = FALSE;
         return TRUE;
     }
     if(textField == nameText)
     {
-    newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:LEGAL] invertedSet];
-    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
-    [self checkName];
-    return ([string isEqualToString:filtered] && !([newString length] > 6));
+        newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:LEGAL] invertedSet];
+        NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+        [self checkName];
+        return ([string isEqualToString:filtered] && !([newString length] > 6));
     }
     //return !([newString length] > 5);
     return FALSE;
@@ -228,8 +229,8 @@ bool countrySelected = FALSE;
     [nameText resignFirstResponder];
     [countryText resignFirstResponder];
     [countryTableView resignFirstResponder];
-    [self validateTextField];
     [self checkName];
+    [self validateTextField];
 }
 
 // Close keyboard when Enter or Done is pressed
@@ -243,21 +244,22 @@ bool countrySelected = FALSE;
 	} else {
 		return NO;
 	}
+    [self checkName];
     [self validateTextField];
 }
 
 - (IBAction)backgroundTouched:(id)sender {
     [self.view endEditing:YES];
-    [self validateTextField];
     [self checkName];
+    [self validateTextField];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     [nameText resignFirstResponder];
     [countryText resignFirstResponder];
     [countryTableView resignFirstResponder];
-    [self validateTextField];
     [self checkName];
+    [self validateTextField];
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
@@ -352,7 +354,7 @@ countryTableView.rowHeight = tableHeight;
 		NSRange substringRangeUpperCase = [curString rangeOfString:[substring uppercaseString]];
         
 		if (substringRangeLowerCase.length != 0 || substringRangeUpperCase.length != 0    ) {
-			[autoCompleteArray addObject:curString];
+			[autoCompleteArray addObject:curString] ;
 		}
 	}
 	levelPickerView.hidden = YES;
@@ -405,7 +407,7 @@ countryTableView.rowHeight = tableHeight;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
-	countryText.text = selectedCell.textLabel.text;
+    countryText.text = selectedCell.textLabel.text;
     country = countryText.text;
     countrySelected = TRUE;
     countryText.font = [UIFont fontWithName:@"Trebuchet MS" size:25];
@@ -416,7 +418,8 @@ countryTableView.rowHeight = tableHeight;
 
 -(void)checkName
 {
-    nsURL = [@"http://www.komagan.com/KidsIQ/leaders.php?format=json&checkname=1&name=" stringByAppendingFormat:@"%@", newString];
+    //newString = nameText.text;
+    nsURL = [@"http://www.komagan.com/KidsIQ/leaders.php?format=json&checkname2=1&name=" stringByAppendingFormat:@"%@", newString];
     self.responseData = [NSMutableData data];
     NSURLRequest *aRequest = [NSURLRequest requestWithURL:[NSURL URLWithString: nsURL]];
     [[NSURLConnection alloc] initWithRequest:aRequest delegate:self];
@@ -434,7 +437,7 @@ countryTableView.rowHeight = tableHeight;
 {
     NSError *myError = nil;
     res = [NSJSONSerialization JSONObjectWithData:self.responseData options:NSJSONReadingMutableLeaves error:&myError];
-    
+    newString = nameText.text;
     for(NSDictionary *res1 in res) {
         nameExists = [[res1 objectForKey:@"result"] boolValue];
         if(nameExists)
