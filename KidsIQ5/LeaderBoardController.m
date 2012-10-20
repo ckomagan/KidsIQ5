@@ -233,6 +233,7 @@ int row, page = 0, totalItems;
     [leaderList reloadData];
     NSUInteger row = [indexPath row];
     name = [nameList objectAtIndex:row];
+    country = [countryList objectAtIndex:row];
     score = [scoreList objectAtIndex:row];
     fCount = [[fCountList objectAtIndex:row] intValue];
     fTCount = [[fTCountList objectAtIndex:row] intValue];
