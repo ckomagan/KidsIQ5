@@ -17,7 +17,6 @@
 @property (nonatomic, retain) NSString *name, *country, *scoreDetail;
 @property int fCount, mCount, sCount, fTCount, mTCount, sTCount;
 
-- (NSString*)getFlags:(NSString*)countryname;
 -(IBAction)dismissView;
 
 @end
